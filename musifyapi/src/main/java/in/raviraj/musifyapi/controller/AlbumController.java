@@ -1,6 +1,7 @@
 package in.raviraj.musifyapi.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import in.raviraj.musifyapi.dto.AlbumListResponse;
 import in.raviraj.musifyapi.dto.AlbumRequest;
 import in.raviraj.musifyapi.service.AlbumService;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +30,23 @@ public class AlbumController {
     }
 
     @GetMapping
-    public ResponseEntity<?> listAlbums(){
-        try{
+    public ResponseEntity<?> listAlbums() {
+        try {
             return ResponseEntity.ok(albumService.getAllAlbums());
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            return ResponseEntity.ok(new AlbumListResponse(false, null));
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removeAlbum(@PathVariable String id) {
+        try {
+            Boolean removed = albumService.removeAlbum(id);
+            return removed
+                    ? ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+                    : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
