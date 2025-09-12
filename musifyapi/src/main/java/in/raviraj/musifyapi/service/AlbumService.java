@@ -38,7 +38,7 @@ public class AlbumService {
 
     public Boolean removeAlbum(String id){
         Album existingAlbum = albumRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Album not find" + id));
+                .orElseThrow(() -> new RuntimeException("Album not fond: " + id));
 
         albumRepository.delete(existingAlbum);
         return true;
