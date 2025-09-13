@@ -3,6 +3,7 @@ package in.raviraj.musifyapi.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import in.raviraj.musifyapi.document.Song;
+import in.raviraj.musifyapi.dto.SongListResponse;
 import in.raviraj.musifyapi.dto.SongRequest;
 import in.raviraj.musifyapi.repository.SongRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,17 @@ public class SongService {
         int minutes = (int) (durationSeconds / 60);
         int seconds = (int) (durationSeconds % 60);
         return String.format("%d:%02d", minutes, seconds);
+    }
+
+    public SongListResponse getAllSongs(){
+        return new SongListResponse(true, songRepository.findAll());
+    }
+
+    public Boolean removeSong(String id){
+        Song existingSong = songRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Song not found:- " + id));
+        songRepository.delete(existingSong);
+        return true;
     }
 
 }
