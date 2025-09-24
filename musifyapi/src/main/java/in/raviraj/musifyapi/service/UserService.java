@@ -5,6 +5,7 @@ import in.raviraj.musifyapi.dto.RegisterRequest;
 import in.raviraj.musifyapi.dto.UserResponse;
 import in.raviraj.musifyapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +34,10 @@ public class UserService {
                 .email(request.getEmail())
                 .role(UserResponse.Role.USER)
                 .build();
+    }
+
+    public User findByEmail(String email){
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found:- " + email));
     }
 }
