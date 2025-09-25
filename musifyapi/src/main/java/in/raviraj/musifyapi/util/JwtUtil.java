@@ -46,16 +46,17 @@ public class JwtUtil {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> resolver){
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
         final Claims claims = extractAllClaims(token);
-        return resolver.apply(claims);
+        return claimsResolver.apply(claims);
     }
 
     public Claims extractAllClaims(String token){
-        JwtParser parser = Jwts.parser()
+        return Jwts.parser()
                 .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
-                .build();
-        return parser.parseSignedClaims(token).getPayload();
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails){
