@@ -1,30 +1,47 @@
 import toast from "react-hot-toast";
 import { assets } from "../assets/assets";
 import { useState } from "react";
+import { useAuth } from "../context/context";
 
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('')
-  
-  const handleSubmit = async (e) =>{
-    e.preventDefault();
-    setError('');
+  const [error, setError] = useState("");
+  const { register } = useAuth();
 
-    if(!email || !password || !confirmPassword){
-      setError('Please fill in all fields');
-      toast.error('Please fill in all fields');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!email || !password || !confirmPassword) {
+      setError("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
 
-    if(password !== confirmPassword){
-      setError('Password do not match');
-      toast.error('Password do not match');
-
+    if (password !== confirmPassword) {
+      setError("Password do not match");
+      toast.error("Password do not match");
     }
-  }
+
+    setLoading(true);
+    try {
+      const result = await register(email, password);
+      if (result.success) {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
+        setError(result.message);
+      }
+    } catch (e) {
+      toast.error("An unexpected error occured. Please try again later.");
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-900 via-black to-green-900 flex items-center justify-center p-4">
@@ -45,59 +62,74 @@ const Register = () => {
 
         {/*Register Form*/}
         <div className="bg-gray-900/80 backdrop-blug-lg rounded-2xl p-8 shadow-2xl border border-gray-700">
-          <form className="space-y-6" onSubmit={handleSubmit}> 
+          <form className="space-y-6" onSubmit={handleSubmit}>
             {/*Email field*/}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-200 mb-2"
+              >
                 Email Address
               </label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="email"
                 id="email"
                 autoComplete="email"
                 required
-                className="block w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200" 
+                className="block w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
                 placeholder="Enter your email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             {/* Password field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-200 mb-2">Password</label>
-              <input 
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-200 mb-2"
+              >
+                Password
+              </label>
+              <input
                 type="password"
                 name="password"
                 id="password"
                 autoComplete="new-password"
                 required
                 className="block w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
-                placeholder="Create a password" 
+                placeholder="Create a password"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-             {/* Confirm password field */}
+            {/* Confirm password field */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-200 mb-2">Confirm Password</label>
-              <input 
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-200 mb-2"
+              >
+                Confirm Password
+              </label>
+              <input
                 type="password"
                 name="confirmPassword"
                 id="confirmPassword"
                 autoComplete="new-password"
                 required
                 className="block w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
-                placeholder="Confirm your password" 
+                placeholder="Confirm your password"
                 value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
 
             {/*Submit butom*/}
-            <button className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105">Register</button>
+            <button className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105">
+              Register
+            </button>
           </form>
 
           {/* Switch to login */}
@@ -105,19 +137,19 @@ const Register = () => {
             <p className="text-sm text-gray-400">
               Already have an account?
               <button className="text-green-400 hover:text-green-300 font-medium transition-colors">
-                 Sign in here
+                Sign in here
               </button>
             </p>
           </div>
 
-           {/* terms and conditions */}
-           <div className="mt-6 text-center">
-              <p className="text-xs text-gray-400">   
-                By creating an account, you agree to our Terms of Service and Privacy Policy.
-              </p>
-           </div>
+          {/* terms and conditions */}
+          <div className="mt-6 text-center">
+            <p className="text-xs text-gray-400">
+              By creating an account, you agree to our Terms of Service and
+              Privacy Policy.
+            </p>
+          </div>
         </div>
-        
       </div>
     </div>
   );

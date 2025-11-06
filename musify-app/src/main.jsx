@@ -5,7 +5,7 @@ import App from './App.jsx'
 import { AuthProvider } from './context/context.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <AuthProvider> //* Context wrapper
-    <App />      //* Content
+  <AuthProvider> 
+    <App />      
   </AuthProvider>
 )
