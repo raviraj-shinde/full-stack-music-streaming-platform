@@ -1,6 +1,5 @@
 import axios from "axios";
-import { createContext, useContext, useState } from "react";
-import toast from "react-hot-toast";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
@@ -18,6 +17,19 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("userToken"));
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    const storedToken = localStorage.getItem("userToken");
+    const storedUser = localStorage.getItem("userDat");
+
+    if(storedToken && storedUser){
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser));
+    }
+    setLoading(false);
+
+  }, []);
 
   const register = async (email, password) => {
     try {
