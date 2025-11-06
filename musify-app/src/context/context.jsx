@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useState } from "react";
+import toast from "react-hot-toast";
 
 const AuthContext = createContext();
 
@@ -43,8 +44,41 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const login = async (email, password) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL + "/api/auth/login"}`,
+        { email, password }
+      );
+
+      if (response.status === 200) {
+            setToken(response.data.token);
+            setUser({email: response.data.email, role: response.data.role});
+            localStorage.setItem("userToken", response.data.token);
+            localStorage.setItem("userData", JSON.stringify({email: response.data.email, role: response.data.role}));
+            return {success: true};
+        } else {
+            return {
+                success: false,
+                message: response.data.message || "Login failed"
+            };
+        }
+    } catch (error) {
+      return {
+        success: false,
+        message: error.response.data || "Network Error"
+      };
+    }
+  };
+
+  const isAuthenticated = () => {
+    return !!token && !!user;
+  }
+
   const contextValue = {
-    register
+    register,
+    login,
+    isAuthenticated
   };
 
   return (

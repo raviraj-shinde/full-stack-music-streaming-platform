@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { assets } from "../assets/assets";
+import { useAuth } from "../context/context";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const {login} = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,6 +19,20 @@ const Login = () => {
       setError("Please fill in all fields");
       toast.error("Please fill in all fields");
       return;
+    }
+
+    setLoading(true);
+    try {
+      const result = await login(email, password);
+      if (!result.success){
+        toast.error(result.message);
+        setError(result.message);
+      }
+    } catch (e) {
+      setError(e.message);      
+      toast.error("An unexpected error occured. Please try again later.");
+    } finally{
+      setLoading(false);
     }
 
   };
