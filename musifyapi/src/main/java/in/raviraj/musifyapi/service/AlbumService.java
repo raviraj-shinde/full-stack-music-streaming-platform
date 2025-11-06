@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -36,7 +35,7 @@ public class AlbumService {
         return new AlbumListResponse(true, albumRepository.findAll());
     }
 
-    public Boolean removeAlbum(String id){
+    public Boolean removeAlbum(String id) {
         Album existingAlbum = albumRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Album not fond: " + id));
 
