@@ -7,7 +7,6 @@ const DisplayHome = () => {
         logout();
     }
 
-
   return (
     <>
       <div>Display home</div>

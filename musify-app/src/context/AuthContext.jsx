@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }) => {
         setUser(JSON.parse(storedUser));
     }
     setLoading(false);
-
   }, []);
 
   const register = async (email, password) => {
@@ -100,7 +99,8 @@ export const AuthProvider = ({ children }) => {
     login,
     isAuthenticated,
     loading,
-    logout
+    logout,
+    user
   };
 
   return (
