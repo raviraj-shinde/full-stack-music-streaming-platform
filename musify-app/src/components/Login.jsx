@@ -1,19 +1,18 @@
 import { useState } from "react";
 import { assets } from "../assets/assets";
-import { useAuth } from "../context/context";
+import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 
-const Login = () => {
+const Login = ({ onSwitchToRegister }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const {login} = useAuth();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    e.preventDefault();
-    setError('');
+    setError("");
 
     if (!email || !password) {
       setError("Please fill in all fields");
@@ -24,17 +23,16 @@ const Login = () => {
     setLoading(true);
     try {
       const result = await login(email, password);
-      if (!result.success){
+      if (!result.success) {
         toast.error(result.message);
         setError(result.message);
       }
     } catch (e) {
-      setError(e.message);      
+      setError(e.message);
       toast.error("An unexpected error occured. Please try again later.");
-    } finally{
+    } finally {
       setLoading(false);
     }
-
   };
 
   return (
@@ -55,6 +53,11 @@ const Login = () => {
         {/*Register Form*/}
         <div className="bg-gray-900/80 backdrop-blug-lg rounded-2xl p-8 shadow-2xl border border-gray-700">
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="bg-red-500/20 border border-red-500 rounded-lg p-3 text-red-300 text-sm">
+                {error}
+              </div>
+            )}
             {/*Email field*/}
             <div>
               <label
@@ -72,7 +75,7 @@ const Login = () => {
                 className="block w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
                 placeholder="Enter your email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
@@ -93,13 +96,23 @@ const Login = () => {
                 className="block w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
                 placeholder="Enter your password"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
             {/*Submit butom*/}
-            <button className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105">
-              Login
+            <button
+              disabled={loading}
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
+            >
+              {loading ? (
+                <div className="flex items-center">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  Signing in...
+                </div>
+              ) : (
+                "Sign in"
+              )}
             </button>
           </form>
 
@@ -107,7 +120,10 @@ const Login = () => {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-400">
               Don't have an account?
-              <button className="text-green-400 hover:text-green-300 font-medium transition-colors">
+              <button
+                className="text-green-400 hover:text-green-300 font-medium transition-colors cursor-pointer"
+                onClick={onSwitchToRegister}
+              >
                 Sign up here
               </button>
             </p>

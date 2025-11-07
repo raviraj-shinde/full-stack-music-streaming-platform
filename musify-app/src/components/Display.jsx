@@ -5,7 +5,7 @@ import DisplayAlbum from "./DisplayAlbum";
 
 const Display = () => {
     return (
-        <div className="flex px-6 pb-4 overflow-auto">
+        <div className="flex-1 px-6 pb-4 overflow-auto">
             <Routes>
                 <Route path="/" element={<DisplayHome/>}/>
                 <Route path="/album" element={<DisplayAlbum/>}/>

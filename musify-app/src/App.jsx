@@ -4,10 +4,12 @@ import AuthWrapper from "./components/AuthWrapper";
 
 const App = () => {
   return (
-    <AuthWrapper>
+    <>
       <Toaster />
-      <Display />
-    </AuthWrapper>
+      <AuthWrapper>
+        <Display />
+      </AuthWrapper>
+    </>
   );
 };
 

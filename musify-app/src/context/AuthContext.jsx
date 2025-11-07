@@ -1,6 +1,8 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 
+/***************************** Auth-Context ***************************************/
+
 const AuthContext = createContext();
 
 export const useAuth = () => {
@@ -14,14 +16,13 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const API_BASE_URL = "http://localhost:8080";
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);  
   const [token, setToken] = useState(localStorage.getItem("userToken"));
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     const storedToken = localStorage.getItem("userToken");
-    const storedUser = localStorage.getItem("userDat");
+    const storedUser = localStorage.getItem("userData");
 
     if(storedToken && storedUser){
         setToken(storedToken);
@@ -87,10 +88,19 @@ export const AuthProvider = ({ children }) => {
     return !!token && !!user;
   }
 
+  const logout = () => {
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userData");
+  }
+
   const contextValue = {
     register,
     login,
-    isAuthenticated
+    isAuthenticated,
+    loading,
+    logout
   };
 
   return (
