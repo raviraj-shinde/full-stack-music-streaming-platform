@@ -1,22 +1,29 @@
 import { ChevronLeft, ChevronRight, LogOut, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const {user, logout } = useAuth();
-  console.log(user);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-  }
+  };
 
   return (
     <>
       <div className="w-full flex justify-between items-center font-semibold">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-black p-2 rounded-2xl cursor-pointer hover:bg-gray-800 transition-colors">
+          <div
+            onClick={() => navigate(-1)}
+            className="w-8 h-8 bg-black p-2 rounded-2xl cursor-pointer hover:bg-gray-800 transition-colors"
+          >
             <ChevronLeft className="w-4 h-4 text-white" />
           </div>
-          <div className="w-8 h-8 bg-black p-2 rounded-2xl cursor-pointer hover:bg-gray-800 transition-colors">
+          <div
+            onClick={() => navigate(1)}
+            className="w-8 h-8 bg-black p-2 rounded-2xl cursor-pointer hover:bg-gray-800 transition-colors"
+          >
             <ChevronRight className="w-4 h-4 text-white" />
           </div>
         </div>
@@ -35,7 +42,7 @@ const Navbar = () => {
             title="Logout"
             className="bg-red-600 hover:bg-red-700 rounded-2xl px-3 py-1 text-[15px] cursor-pointer transition-colors flex items-center gap-1"
           >
-            <LogOut className="w-4 h-4"/>
+            <LogOut className="w-4 h-4" />
             <span className="hidden sm:inline">Logout</span>
           </button>
         </div>

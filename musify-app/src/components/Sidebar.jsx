@@ -49,7 +49,7 @@ const Sidebar = () => {
               </button>
             </div>
           )}
-        </div>
+        </div>  
       </div>
 
       <div className="bg-[#121212] h-[85%] rounded">

@@ -5,6 +5,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
+  export const API_BASE_URL = "http://localhost:8080";
+
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -14,7 +17,6 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const API_BASE_URL = "http://localhost:8080";
 
   const [user, setUser] = useState(null);  
   const [token, setToken] = useState(localStorage.getItem("userToken"));
@@ -59,12 +61,14 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post(
-        `${API_BASE_URL + "/api/auth/login"}`,
+        `${API_BASE_URL}/api/auth/login`,
         { email, password }
       );
 
       if (response.status === 200) {
             setToken(response.data.token);
+            console.log(response.data.token);
+
             setUser({email: response.data.email, role: response.data.role});
             localStorage.setItem("userToken", response.data.token);
             localStorage.setItem("userData", JSON.stringify({email: response.data.email, role: response.data.role}));
@@ -83,7 +87,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const isAuthenticated = () => {
+  const isAuthenticated = () => { 
     return !!token && !!user;
   }
 
@@ -94,13 +98,20 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("userData");
   }
 
+
+  const getAuthHeaders = () => {
+    return token ? {Authorization: `Bearer ${token}`} : {};
+  }
+
   const contextValue = {
     register,
     login,
     isAuthenticated,
     loading,
     logout,
-    user
+    user,
+    token,
+    getAuthHeaders
   };
 
   return (
