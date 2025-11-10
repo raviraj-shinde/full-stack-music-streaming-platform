@@ -1,14 +1,24 @@
 import { ArrowRight, Home, Library, Plus, Search, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSearch } from "../context/SearchContext";
+import Player from "./Player";
 
 const Sidebar = () => {
   const [showSearchInput, setShowSearchInput] = useState(false);
   const navigate = useNavigate();
+  const { searchQuery, setSearchQuery, setIsSearchActive, clearSearch } =
+    useSearch();
 
   const handleSearchClick = () => {
     setShowSearchInput(true);
+    setIsSearchActive(true);
     navigate("/search");
+  };
+
+  const handleClearSearch = () => {
+    setShowSearchInput(false);
+    clearSearch();
   };
 
   return (
@@ -35,6 +45,8 @@ const Sidebar = () => {
             <div className="flex items-center gap-2 pl-4">
               <Search className="w-5 h-5 text-gray-400" />
               <input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 type="text"
                 placeholder="What do you want to listen to?"
                 className="flex-1 bg-[#2a2a2a] text-white placeholder-gray-400 px-3 py-2 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
@@ -42,14 +54,14 @@ const Sidebar = () => {
               />
 
               <button
-                onClick={handleSearchClick}
+                onClick={handleClearSearch}
                 className="p-1 hover:bg-gray-700 rounded-full transition-colors"
               >
                 <X className="w-4 h-4 text-gray-400 hover:text-white" />
               </button>
             </div>
           )}
-        </div>  
+        </div>
       </div>
 
       <div className="bg-[#121212] h-[85%] rounded">
@@ -71,9 +83,11 @@ const Sidebar = () => {
           </button>
         </div>
         <div className="p-4 bg-[#242424] m-3 rounded font-semibold flex flex-col items-start justify-start pl-4 mt-4">
-            <h1>Let's find some podcasts to follow</h1>
-            <p className="font-light">We will keep you update on new episodes</p>
-            <button className="px-4 py-1.5 bg-white text-[15px] text-black rounded-full mt-4 cursor-pointer" >Browse podcast</button>
+          <h1>Let's find some podcasts to follow</h1>
+          <p className="font-light">We will keep you update on new episodes</p>
+          <button className="px-4 py-1.5 bg-white text-[15px] text-black rounded-full mt-4 cursor-pointer">
+            Browse podcast
+          </button>
         </div>
       </div>
     </div>
