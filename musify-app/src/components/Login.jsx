@@ -50,7 +50,7 @@ const Login = ({ onSwitchToRegister }) => {
           <p className="text-gray-300">Sign in to continue listening</p>
         </div>
 
-        {/*Register Form*/}
+        {/*Login Form*/}
         <div className="bg-gray-900/80 backdrop-blug-lg rounded-2xl p-8 shadow-2xl border border-gray-700">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
@@ -100,7 +100,7 @@ const Login = ({ onSwitchToRegister }) => {
               />
             </div>
 
-            {/*Submit butom*/}
+            {/*Login butom*/}
             <button
               disabled={loading}
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"

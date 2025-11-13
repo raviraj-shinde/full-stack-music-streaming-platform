@@ -67,7 +67,6 @@ export const AuthProvider = ({ children }) => {
 
       if (response.status === 200) {
             setToken(response.data.token);
-            console.log(response.data.token);
 
             setUser({email: response.data.email, role: response.data.role});
             localStorage.setItem("userToken", response.data.token);
