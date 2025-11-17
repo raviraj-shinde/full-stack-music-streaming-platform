@@ -38,7 +38,7 @@ public class AuthController {
             User exixtingUser = userService.findByEmail(userDetails.getUsername());
             String token = jwtUtil.generateToken(userDetails, exixtingUser.getRole().name());
 
-            return ResponseEntity.ok(new AuthResponse(token, request.getEmail(), "USER"));
+            return ResponseEntity.ok(new AuthResponse(token, request.getEmail(), exixtingUser.getRole().toString()));
         } catch (BadCredentialsException e) {
             return ResponseEntity.badRequest().body("Email/Password is incorrect.");
         } catch (Exception e) {
