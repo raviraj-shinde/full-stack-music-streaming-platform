@@ -1,7 +1,11 @@
+import DashboardLayout from "../layout/DashboardLayout";
+
 const AddAlbum = () => {
-    return (
-        <div>Add album component</div>
-    );
-}
+  return (
+    <DashboardLayout activeMenu="Add Album">
+      <div>Add Album</div>
+    </DashboardLayout>
+  );
+};
 
 export default AddAlbum;

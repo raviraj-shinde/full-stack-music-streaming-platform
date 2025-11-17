@@ -1,7 +1,11 @@
+import DashboardLayout from "../layout/DashboardLayout";
+
 const ListSong = () => {
-    return (
-        <div>List song component</div>
-    );
-}
+  return (
+    <DashboardLayout activeMenu="List Songs">
+      <div>List Song</div>
+    </DashboardLayout>
+  );
+};
 
 export default ListSong;

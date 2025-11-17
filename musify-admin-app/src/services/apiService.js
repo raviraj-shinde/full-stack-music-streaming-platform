@@ -33,7 +33,6 @@ apiClient.interceptors.response.use(
       localStorage.removeItem("adminUser");
       window.location.href = "/login";
     }
-
     return Promise.reject(error);
   }
 );
