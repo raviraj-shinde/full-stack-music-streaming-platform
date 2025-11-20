@@ -42,6 +42,7 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         email,
         password,
+        portal: "admin"
       });
 
       if (response.status === 200 && response.data) {

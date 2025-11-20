@@ -33,12 +33,17 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody AuthRequest request) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-
             UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-            User exixtingUser = userService.findByEmail(userDetails.getUsername());
-            String token = jwtUtil.generateToken(userDetails, exixtingUser.getRole().name());
+            User existingUser = userService.findByEmail(userDetails.getUsername());
 
-            return ResponseEntity.ok(new AuthResponse(token, request.getEmail(), exixtingUser.getRole().toString()));
+            if (request.getPortal().equalsIgnoreCase("admin") &&
+                    existingUser.getRole().name().equalsIgnoreCase("USER")){
+                return ResponseEntity.badRequest().body("Email/Password is incorrect");
+            }
+
+                String token = jwtUtil.generateToken(userDetails, existingUser.getRole().name());
+
+            return ResponseEntity.ok(new AuthResponse(token, request.getEmail(), existingUser.getRole().toString()));
         } catch (BadCredentialsException e) {
             return ResponseEntity.badRequest().body("Email/Password is incorrect.");
         } catch (Exception e) {
